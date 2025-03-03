@@ -1,0 +1,81 @@
+services:
+  process:
+    container_name: process
+    build: .
+    command: poetry run python /home/python_user/src/process_main.py
+    environment:
+      - DATABASE_HOSTNAME=COSMO_CARGO_DB
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_PORT=5432
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - 'postgres:COSMO_CARGO_DB'
+      - 'redis:cosmo_cargo_cache'
+    volumes:
+      - ./alembic/:/home/python_user/alembic/
+      - ./src/:/home/python_user/src/
+
+  dashboard:
+    container_name: dashboard
+    build: .
+    command: poetry run streamlit run /home/python_user/src/dashboard.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped
+    environment:
+      - DATABASE_HOSTNAME=COSMO_CARGO_DB
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_PORT=5432
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8501:8501"
+    links:
+      - 'postgres:COSMO_CARGO_DB'
+      - 'redis:cosmo_cargo_cache'
+    volumes:
+      - ./src/:/home/python_user/src/
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: cosmo_cargo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:80"
+    volumes:
+    - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    links:
+    - "postgres:pgsql-server"
+
+  redis:
+    image: redis:7.2.5-alpine3.20
+    container_name: redis
+    volumes:
+      - redis-data:/data
+
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  pgadmin-data:
+  redis-data:

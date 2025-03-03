@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "happy"
+version = "0.1.0"
+description = ""
+authors = ["Franklin_Jenkins <fwj9006@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.2"
+pydantic = "^2.10.6"
+pydantic-settings = "^2.8.1"
+sqlalchemy = "^2.0.38"
+psycopg2-binary = "^2.9.10"
+alembic = "^1.14.1"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.13.3"
+redis = "^5.2.1"
+ruff = "^0.9.9"
+pytest-playwright = "^0.7.0"
+streamlit = "^1.42.2"
+pandas = "^2.2.3"
+matplotlib = "^3.10.1"
+plotly = "^6.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
