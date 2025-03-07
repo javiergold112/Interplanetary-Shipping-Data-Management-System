@@ -6,7 +6,6 @@ from process.etl import CosmoCargoProcess
 from config import PostgresConfig
 from core.logger import logger
 
-
 # check if database exist of not create database
 def check_postgres_connection():
     """Check if PostgreSQL server is up and running."""

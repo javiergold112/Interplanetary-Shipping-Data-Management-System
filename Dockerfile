@@ -54,15 +54,19 @@ COPY ./pyproject.toml ./README.md $APP_HOME
 # [OPTIONAL] Validate the project is properly configured
 RUN poetry check
 
+RUN apt-get update && apt-get install -y \
+    libpq-dev gcc build-essential python3-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN poetry lock && poetry export -f requirements.txt --without-hashes > requirements.txt
+RUN pip install --timeout=120 -r requirements.txt
 # Install Dependencies
-RUN poetry install --no-interaction --no-cache
+# RUN poetry install --no-interaction --no-cache
+RUN poetry install --no-interaction --no-cache --no-root
 RUN poetry run playwright install --with-deps chromium 
 
 
 FROM example-app-base AS example-app-final
 
-COPY .env $APP_HOME
 COPY src/ $APP_HOME/src/
-COPY alembic.ini $APP_HOME/
-COPY alembic/ $APP_HOME/alembic/
-COPY scripts/ $APP_HOME/scripts/
+COPY .env $APP_HOME/.env

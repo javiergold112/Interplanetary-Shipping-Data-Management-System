@@ -31,6 +31,12 @@ This command builds and starts all required containers:
 - Data collection service
 - Streamlit visualization dashboard
 
+
+in first container start up you must run migrations, do it with this command
+```bash
+sudo docker compose exec process poetry run python -m scripts.migration
+```
+
 ### Accessing Components
 
 Once running, access the system components:

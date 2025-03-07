@@ -21,7 +21,8 @@ config = context.config
 # ---------------- added code here -------------------------#
 # this will overwrite the ini-file sqlalchemy.url path
 # with the path given in the config of the main code
-from src.config import PostgresConfig
+
+from config import PostgresConfig
 config.set_main_option("sqlalchemy.url", f"postgresql+psycopg2://{PostgresConfig.DATABASE_USERNAME}:{PostgresConfig.DATABASE_PASSWORD}@{PostgresConfig.DATABASE_HOSTNAME}:{PostgresConfig.DATABASE_PORT}/{PostgresConfig.DATABASE_NAME}")
 # ----------------          -------------------------#
 
@@ -37,7 +38,7 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 
 # ---------------- added code here -------------------------#
-from src.model import Base
+from model import Base
 
 target_metadata = Base.metadata
 # ----------------          -------------------------#

@@ -65,5 +65,5 @@ class PostgreDAO:
 
     @init_session
     def get_all(self, db: Session):
-        query = select(self.model).where(self.model.is_deleted == False)
+        query = select(self.model)
         return db.execute(query).scalars().all()

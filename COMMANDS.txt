@@ -1,1 +1,2 @@
 sudo docker compose exec process poetry run python -m scripts.migration
+docker compose exec process poetry run python /home/python_user/src/migration.py
